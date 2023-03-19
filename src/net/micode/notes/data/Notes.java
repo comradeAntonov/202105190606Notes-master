@@ -15,7 +15,9 @@
  */
 
 package net.micode.notes.data;
-
+/*
+这个文件主要定义了一些小米便签开发过程中要使用的一些常量，接口，类
+*/
 import android.net.Uri;
 public class Notes {
     public static final String AUTHORITY = "micode_notes";
