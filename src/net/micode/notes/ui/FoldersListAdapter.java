@@ -29,8 +29,8 @@ import net.micode.notes.data.Notes;
 import net.micode.notes.data.Notes.NoteColumns;
 
 
-public class FoldersListAdapter extends CursorAdapter {
-    public static final String [] PROJECTION = {
+public class FoldersListAdapter extends CursorAdapter {//是Cursor和ListView的接口
+    public static final String [] PROJECTION = {//调用数据库中便签的ID和片段
         NoteColumns.ID,
         NoteColumns.SNIPPET
     };
@@ -44,12 +44,12 @@ public class FoldersListAdapter extends CursorAdapter {
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {//创建一个文件夹，对于各文件夹中子标签的初始化
         return new FolderListItem(context);
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, Context context, Cursor cursor) {//将各个布局文件绑定起来
         if (view instanceof FolderListItem) {
             String folderName = (cursor.getLong(ID_COLUMN) == Notes.ID_ROOT_FOLDER) ? context
                     .getString(R.string.menu_move_parent_folder) : cursor.getString(NAME_COLUMN);
@@ -57,7 +57,7 @@ public class FoldersListAdapter extends CursorAdapter {
         }
     }
 
-    public String getFolderName(Context context, int position) {
+    public String getFolderName(Context context, int position) {//根据数据库中标签的ID得到标签的各项内容
         Cursor cursor = (Cursor) getItem(position);
         return (cursor.getLong(ID_COLUMN) == Notes.ID_ROOT_FOLDER) ? context
                 .getString(R.string.menu_move_parent_folder) : cursor.getString(NAME_COLUMN);
@@ -68,7 +68,7 @@ public class FoldersListAdapter extends CursorAdapter {
 
         public FolderListItem(Context context) {
             super(context);
-            inflate(context, R.layout.folder_list_item, this);
+            inflate(context, R.layout.folder_list_item, this);//根据布局文件的名字等信息将其找出来
             mName = (TextView) findViewById(R.id.tv_folder_name);
         }
 
