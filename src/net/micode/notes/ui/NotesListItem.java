@@ -30,15 +30,15 @@ import net.micode.notes.tool.DataUtils;
 import net.micode.notes.tool.ResourceParser.NoteItemBgResources;
 
 
-public class NotesListItem extends LinearLayout {
-    private ImageView mAlert;
-    private TextView mTitle;
-    private TextView mTime;
+public class NotesListItem extends LinearLayout {//创建便签列表项目选项
+    private ImageView mAlert;//闹钟图片
+    private TextView mTitle;//标题
+    private TextView mTime;//时间
     private TextView mCallName;
-    private NoteItemData mItemData;
-    private CheckBox mCheckBox;
+    private NoteItemData mItemData;//数据
+    private CheckBox mCheckBox;//打勾框框
 
-    public NotesListItem(Context context) {
+    public NotesListItem(Context context) {//初始化数据
         super(context);
         inflate(context, R.layout.note_item, this);
         mAlert = (ImageView) findViewById(R.id.iv_alert_icon);
@@ -48,15 +48,15 @@ public class NotesListItem extends LinearLayout {
         mCheckBox = (CheckBox) findViewById(android.R.id.checkbox);
     }
 
-    public void bind(Context context, NoteItemData data, boolean choiceMode, boolean checked) {
+    public void bind(Context context, NoteItemData data, boolean choiceMode, boolean checked) {//根据data的属性对各个控件的属性的控制，主要是可见性Visibility，内容setText，格式setTextAppearance
         if (choiceMode && data.getType() == Notes.TYPE_NOTE) {
-            mCheckBox.setVisibility(View.VISIBLE);
-            mCheckBox.setChecked(checked);
+            mCheckBox.setVisibility(View.VISIBLE);   //设置可见行为可见
+            mCheckBox.setChecked(checked);    //格子打钩
         } else {
             mCheckBox.setVisibility(View.GONE);
         }
 
-        mItemData = data;
+        mItemData = data;//设置控件属性，一共三种情况，由data的id和父id是否与保存到文件夹的id一致来决定
         if (data.getId() == Notes.ID_CALL_RECORD_FOLDER) {
             mCallName.setVisibility(View.GONE);
             mAlert.setVisibility(View.VISIBLE);
@@ -64,12 +64,12 @@ public class NotesListItem extends LinearLayout {
             mTitle.setText(context.getString(R.string.call_record_folder_name)
                     + context.getString(R.string.format_folder_files_count, data.getNotesCount()));
             mAlert.setImageResource(R.drawable.call_record);
-        } else if (data.getParentId() == Notes.ID_CALL_RECORD_FOLDER) {
+        } else if (data.getParentId() == Notes.ID_CALL_RECORD_FOLDER) {//关于闹钟的设置
             mCallName.setVisibility(View.VISIBLE);
             mCallName.setText(data.getCallName());
             mTitle.setTextAppearance(context,R.style.TextAppearanceSecondaryItem);
             mTitle.setText(DataUtils.getFormattedSnippet(data.getSnippet()));
-            if (data.hasAlert()) {
+            if (data.hasAlert()) {//图片来源的设置
                 mAlert.setImageResource(R.drawable.clock);
                 mAlert.setVisibility(View.VISIBLE);
             } else {
@@ -77,9 +77,9 @@ public class NotesListItem extends LinearLayout {
             }
         } else {
             mCallName.setVisibility(View.GONE);
-            mTitle.setTextAppearance(context, R.style.TextAppearancePrimaryItem);
+            mTitle.setTextAppearance(context, R.style.TextAppearancePrimaryItem);//设置title格式
 
-            if (data.getType() == Notes.TYPE_FOLDER) {
+            if (data.getType() == Notes.TYPE_FOLDER) {//设置内容，获取相关时间，从data里编辑的日期中获取
                 mTitle.setText(data.getSnippet()
                         + context.getString(R.string.format_folder_files_count,
                                 data.getNotesCount()));
@@ -97,21 +97,21 @@ public class NotesListItem extends LinearLayout {
         mTime.setText(DateUtils.getRelativeTimeSpanString(data.getModifiedDate()));
 
         setBackground(data);
-    }
+    }//根据data的文件属性来设置背景
 
     private void setBackground(NoteItemData data) {
-        int id = data.getBgColorId();
-        if (data.getType() == Notes.TYPE_NOTE) {
+        int id = data.getBgColorId();//，若是note型文件，则4种情况，对于4种不同情况的背景来源
+        if (data.getType() == Notes.TYPE_NOTE) {//单个数据并且只有一个子文件夹
             if (data.isSingle() || data.isOneFollowingFolder()) {
                 setBackgroundResource(NoteItemBgResources.getNoteBgSingleRes(id));
-            } else if (data.isLast()) {
+            } else if (data.isLast()) {//是最后一个数据
                 setBackgroundResource(NoteItemBgResources.getNoteBgLastRes(id));
-            } else if (data.isFirst() || data.isMultiFollowingFolder()) {
+            } else if (data.isFirst() || data.isMultiFollowingFolder()) {//是一个数据并有多个子文件夹
                 setBackgroundResource(NoteItemBgResources.getNoteBgFirstRes(id));
             } else {
                 setBackgroundResource(NoteItemBgResources.getNoteBgNormalRes(id));
             }
-        } else {
+        } else {//若不是note直接调用文件夹的背景来源
             setBackgroundResource(NoteItemBgResources.getFolderBgRes());
         }
     }
