@@ -29,15 +29,16 @@ import net.micode.notes.R;
 
 public class DropdownMenu {
     private Button mButton;
-    private PopupMenu mPopupMenu;
+    private PopupMenu mPopupMenu;//声明一个下拉菜单
     private Menu mMenu;
 
     public DropdownMenu(Context context, Button button, int menuId) {
         mButton = button;
-        mButton.setBackgroundResource(R.drawable.dropdown_icon);
+        mButton.setBackgroundResource(R.drawable.dropdown_icon); //设置这个view的背景
         mPopupMenu = new PopupMenu(context, mButton);
         mMenu = mPopupMenu.getMenu();
-        mPopupMenu.getMenuInflater().inflate(menuId, mMenu);
+        mPopupMenu.getMenuInflater().inflate(menuId, mMenu);//MenuInflater是用来实例化Menu目录下的Menu布局文件
+                                                            //根据ID来确认menu的内容选项
         mButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 mPopupMenu.show();
@@ -45,17 +46,17 @@ public class DropdownMenu {
         });
     }
 
-    public void setOnDropdownMenuItemClickListener(OnMenuItemClickListener listener) {
+    public void setOnDropdownMenuItemClickListener(OnMenuItemClickListener listener) {//设置菜单的监听
         if (mPopupMenu != null) {
             mPopupMenu.setOnMenuItemClickListener(listener);
         }
     }
 
-    public MenuItem findItem(int id) {
+    public MenuItem findItem(int id) {//对于菜单选项的初始化，根据索引搜索菜单需要的选项
         return mMenu.findItem(id);
     }
 
-    public void setTitle(CharSequence title) {
+    public void setTitle(CharSequence title) {//设置标题
         mButton.setText(title);
     }
 }
