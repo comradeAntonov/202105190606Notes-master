@@ -22,6 +22,7 @@ import android.net.Uri;
 public class Notes {
     public static final String AUTHORITY = "micode_notes";
     public static final String TAG = "Notes";
+    //用于设置NoteColumns.TYPE
     public static final int TYPE_NOTE     = 0;
     public static final int TYPE_FOLDER   = 1;
     public static final int TYPE_SYSTEM   = 2;
@@ -56,14 +57,14 @@ public class Notes {
     /**
      * Uri to query all notes and folders
      */
-    public static final Uri CONTENT_NOTE_URI = Uri.parse("content://" + AUTHORITY + "/note");
+    public static final Uri CONTENT_NOTE_URI = Uri.parse("content://" + AUTHORITY + "/note");//查询便签和文件夹的指针
 
     /**
      * Uri to query data
      */
-    public static final Uri CONTENT_DATA_URI = Uri.parse("content://" + AUTHORITY + "/data");
+    public static final Uri CONTENT_DATA_URI = Uri.parse("content://" + AUTHORITY + "/data");//查找数据的指针
 
-    public interface NoteColumns {
+    public interface NoteColumns {//用于创建数据库的表头
         /**
          * The unique ID for a row
          * <P> Type: INTEGER (long) </P>
@@ -167,7 +168,7 @@ public class Notes {
          * <P> Type : INTEGER (long) </P>
          */
         public static final String VERSION = "version";
-    }
+    }//以上均为定义变迁的属性的常量
 
     public interface DataColumns {
         /**
@@ -243,7 +244,7 @@ public class Notes {
         public static final String DATA5 = "data5";
     }
 
-    public static final class TextNote implements DataColumns {
+    public static final class TextNote implements DataColumns {//检查模式（check mode）的选择
         /**
          * Mode to indicate the text in check list mode or not
          * <P> Type: Integer 1:check list mode 0: normal mode </P>
