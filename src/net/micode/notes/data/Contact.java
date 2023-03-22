@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2010-2011, The MiCode Open Source Community (www.micode.net)
- *测试一下
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -27,6 +26,7 @@ import java.util.HashMap;
 
 public class Contact {
     private static HashMap<String, String> sContactCache;
+    //存储联系人信息
     private static final String TAG = "Contact";
 
     private static final String CALLER_ID_SELECTION = "PHONE_NUMBERS_EQUAL(" + Phone.NUMBER
@@ -35,18 +35,19 @@ public class Contact {
             + "(SELECT raw_contact_id "
             + " FROM phone_lookup"
             + " WHERE min_match = '+')";
-
+    //获取联系人
     public static String getContact(Context context, String phoneNumber) {
         if(sContactCache == null) {
             sContactCache = new HashMap<String, String>();
         }
-
+    //查找map中是否有phoneNumber信息
         if(sContactCache.containsKey(phoneNumber)) {
             return sContactCache.get(phoneNumber);
         }
 
         String selection = CALLER_ID_SELECTION.replace("+",
                 PhoneNumberUtils.toCallerIDMinMatch(phoneNumber));
+        //查找数据库中phoneNumber的信息
         Cursor cursor = context.getContentResolver().query(
                 Data.CONTENT_URI,
                 new String [] { Phone.DISPLAY_NAME },
@@ -56,16 +57,19 @@ public class Contact {
 
         if (cursor != null && cursor.moveToFirst()) {
             try {
+                //找到信息
                 String name = cursor.getString(0);
                 sContactCache.put(phoneNumber, name);
                 return name;
             } catch (IndexOutOfBoundsException e) {
+                //发生异常
                 Log.e(TAG, " Cursor get string error " + e.toString());
                 return null;
             } finally {
                 cursor.close();
             }
         } else {
+            //未找到信息
             Log.d(TAG, "No contact matched with number:" + phoneNumber);
             return null;
         }
